@@ -7,166 +7,249 @@
 	},
 	"item": [
 		{
-			"name": "localhost:8080/pacientes",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"nome\": \"Marco\",\r\n  \"cpf\": \"333.222.111-32\",\r\n  \"dataNascimento\": \"22-06-1998\",\r\n  \"planoSaude\": \"BASICO\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+			"name": "PACIENTES",
+			"item": [
+				{
+					"name": "localhost:8080/pacientes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Arthur\",\r\n  \"cpf\": \"123.321.333-12\",\r\n  \"dataNascimento\": \"11-11-2000\",\r\n  \"planoSaude\": \"PRO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/pacientes"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/pacientes"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/pacientes",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:8080/pacientes"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/pacientes",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"nome\": \"Arthur\",\r\n  \"cpf\": \"123.321.333-12\",\r\n  \"dataNascimento\": \"11-11-2000\",\r\n  \"planoSaude\": \"PRO\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "localhost:8080/pacientes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Marco\",\r\n  \"cpf\": \"333.222.111-32\",\r\n  \"dataNascimento\": \"22-06-1998\",\r\n  \"planoSaude\": \"BASICO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/pacientes"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/pacientes"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/dentistas",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"nomeDentista\": \"Juliana Dentista\",\r\n  \"cro\": \"90023\",\r\n  \"especialidade\": \"Endodontia\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "localhost:8080/pacientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/pacientes"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/dentistas"
-			},
-			"response": []
+				{
+					"name": "localhost:8080/pacientes/1/consultas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/pacientes/1/consultas"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "localhost:8080/dentistas",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:8080/dentistas"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/consultas",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 1,\r\n\"dataConsulta\": \"23-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+			"name": "DENTISTAS",
+			"item": [
+				{
+					"name": "localhost:8080/dentistas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nomeDentista\": \"Juliana Dentista\",\r\n  \"cro\": \"90023\",\r\n  \"especialidade\": \"Endodontia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/dentistas"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/consultas"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/dentistas",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\"nomeDentista\": \"Danilo Jr\",\r\n\"cro\": \"12302\",\r\n\"especialidade\": \"Bucomaxílico\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "localhost:8080/dentistas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"nomeDentista\": \"Danilo Jr\",\r\n\"cro\": \"12302\",\r\n\"especialidade\": \"Bucomaxílico\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/dentistas"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/dentistas"
-			},
-			"response": []
+				{
+					"name": "localhost:8080/dentistas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/dentistas"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "localhost:8080/consultas",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 1,\r\n\"dataConsulta\": \"23-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+			"name": "CONSULTAS",
+			"item": [
+				{
+					"name": "localhost:8080/consultas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 1,\r\n\"dataConsulta\": \"23-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/consultas"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/consultas"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/consultas",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 2,\r\n\"dataConsulta\": \"24-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+				{
+					"name": "localhost:8080/consultas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 2,\r\n\"dataConsulta\": \"24-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/consultas"
+					},
+					"response": []
 				},
-				"url": "localhost:8080/consultas"
-			},
-			"response": []
+				{
+					"name": "localhost:8080/consultas",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"idPaciente\": 1,\r\n\"idDentista\": 1,\r\n\"dataConsulta\": \"23-08-2023\",\r\n\"custoConsulta\": 230\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/consultas"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:8080/consultas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/consultas"
+					},
+					"response": []
+				}
+			]
 		},
 		{
-			"name": "localhost:8080/consultas",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:8080/consultas"
-			},
-			"response": []
-		},
-		{
-			"name": "localhost:8080/pacientes/1/consultas",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "localhost:8080/pacientes/1/consultas"
-			},
-			"response": []
+			"name": "SINISTRO",
+			"item": [
+				{
+					"name": "POST Sinistro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tipoSinistro\": \"Conluio paciente-dentista\",\r\n  \"valorSinistro\": 1000,\r\n  \"dataSinistro\": \"03-11-2024\",\r\n  \"idPaciente\": 1,\r\n  \"idDentista\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/sinistros"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Sinistro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/sinistros"
+					},
+					"response": []
+				},
+				{
+					"name": "GET Sinistro (id)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/sinistros/1"
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Sinistro (id)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/sinistros/1"
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Sinistro (id)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "localhost:8080/sinistros/1"
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
