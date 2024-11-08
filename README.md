@@ -67,7 +67,9 @@ Clique [aqui](https://www.youtube.com/watch?v=IV0yVdgiT-4) para acessar o vídeo
   "nome": "Arthur",
   "cpf": "123.321.333-12",
   "dataNascimento": "11-11-2000",
-  "planoSaude": "PRO"
+  "planoSaude": "PRO",
+  "telefone": "11999999999",
+  "email": "arthur@email.com"
   }
   ```
   
@@ -85,7 +87,8 @@ Clique [aqui](https://www.youtube.com/watch?v=IV0yVdgiT-4) para acessar o vídeo
   {
   "nomeDentista": "Juliana Pinheiro",
   "cro": "90023",
-  "especialidade": "Endodontia"
+  "especialidade": "Endodontia",
+  "email": "juliana@email.com"
   }
   ```
 
@@ -108,3 +111,20 @@ Clique [aqui](https://www.youtube.com/watch?v=IV0yVdgiT-4) para acessar o vídeo
   ```
 - **PUT /consultas/{id}** - Atualiza as informações de uma consulta
 - **DELETE /consultas/{id}** - Remove uma consulta
+
+### Sinistros
+- **GET /sinistros** - Lista todos os sinistros
+- **GET /sinistros/{id}** - Busca um sinistro pelo ID
+- **POST /sinistros** - Cria um novo sinistro
+    Formato do JSON:
+    ```json
+    {
+  "tipoSinistro": "Consultas muito frequentes",
+  "valorSinistro": 2000,
+  "dataSinistro": "23-04-2023",
+  "idPaciente": 1,
+  "idDentista": 1
+  }
+  ```
+- **PUT /sinistros/{id}** - Atualiza as informações de um sinistro
+- **DELETE /sinistros/{id}** - Remove um sinistro
