@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -99,10 +101,18 @@ public class PacienteController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<PacienteResponseDTO> getPacienteById(@PathVariable Long id) {
-        return pacienteRepository.findById(id)
-                .map(paciente -> ResponseEntity.ok(pacienteMapper.pacienteToResponse(paciente)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<EntityModel<PacienteResponseDTO>> getPacienteById(@PathVariable Long id) {
+        return pacienteRepository.findById(id).map(paciente -> {
+            PacienteResponseDTO pacienteResponse = pacienteMapper.pacienteToResponse(paciente);
+
+            EntityModel<PacienteResponseDTO> resource = EntityModel.of(pacienteResponse);
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).getPacienteById(id)).withSelfRel());
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).updatePaciente(id, null)).withRel("editar"));
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).deletePaciente(id)).withRel("deletar"));
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).getConsultasPorPaciente(id)).withRel("consultas"));
+
+            return ResponseEntity.ok(resource);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     // Método original para listar todas as consultas de um paciente específico
@@ -113,12 +123,18 @@ public class PacienteController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}/consultas")
-    public ResponseEntity<List<ConsultaResponseDTO>> getConsultasPorPaciente(@PathVariable Long id) {
+    public ResponseEntity<List<EntityModel<ConsultaResponseDTO>>> getConsultasPorPaciente(@PathVariable Long id) {
         List<Consulta> consultas = consultaRepository.findByPacienteIdPaciente(id);
-        List<ConsultaResponseDTO> consultasResponse = consultas.stream()
-                .map(consultaMapper::consultaToResponse)
-                .toList();
-        return ResponseEntity.ok(consultasResponse);
+
+        List<EntityModel<ConsultaResponseDTO>> consultaResources = consultas.stream()
+                .map(consulta -> {
+                    ConsultaResponseDTO consultaResponse = consultaMapper.consultaToResponse(consulta);
+                    EntityModel<ConsultaResponseDTO> resource = EntityModel.of(consultaResponse);
+                    resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).getConsultasPorPaciente(id)).withSelfRel());
+                    return resource;
+                }).toList();
+
+        return ResponseEntity.ok(consultaResources);
     }
 
     // Método original para atualizar um paciente

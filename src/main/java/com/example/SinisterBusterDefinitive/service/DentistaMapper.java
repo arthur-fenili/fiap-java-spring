@@ -40,6 +40,7 @@ public class DentistaMapper {
         dentista.setNomeDentista(dentistaRequestDTO.nomeDentista());
         dentista.setCro(dentistaRequestDTO.cro());
         dentista.setEspecialidade(dentistaRequestDTO.especialidade());
+        dentista.setEmail(dentistaRequestDTO.email());
         return dentista;
     }
 

@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +62,9 @@ public class DentistaController {
         return ResponseEntity.ok("Dentista deletado via procedure com sucesso.");
     }
 
+
+    // MÉTODOS ORIGINAIS
+
     // Método original para criar dentista
     @Operation(summary = "Cria um dentista e grava no banco.")
     @ApiResponses(value = {
@@ -98,10 +103,18 @@ public class DentistaController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<DentistaResponseDTO> getDentistaById(@PathVariable Long id) {
-        return dentistaRepository.findById(id)
-                .map(dentista -> ResponseEntity.ok(dentistaMapper.dentistaToResponse(dentista)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<EntityModel<DentistaResponseDTO>> getDentistaById(@PathVariable Long id) {
+        return dentistaRepository.findById(id).map(dentista -> {
+            DentistaResponseDTO dentistaResponse = dentistaMapper.dentistaToResponse(dentista);
+
+            EntityModel<DentistaResponseDTO> resource = EntityModel.of(dentistaResponse);
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).getDentistaById(id)).withSelfRel());
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).updateDentista(id, null)).withRel("editar"));
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).deleteDentista(id)).withRel("deletar"));
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).getConsultasPorDentista(id)).withRel("consultas"));
+
+            return ResponseEntity.ok(resource);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     // Método original para buscar todas as consultas de um dentista específico
@@ -112,12 +125,18 @@ public class DentistaController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}/consultas")
-    public ResponseEntity<List<ConsultaResponseDTO>> getConsultasPorDentista(@PathVariable Long id) {
+    public ResponseEntity<List<EntityModel<ConsultaResponseDTO>>> getConsultasPorDentista(@PathVariable Long id) {
         List<Consulta> consultas = consultaRepository.findByDentistaIdDentista(id);
-        List<ConsultaResponseDTO> consultasResponse = consultas.stream()
-                .map(consultaMapper::consultaToResponse)
-                .toList();
-        return ResponseEntity.ok(consultasResponse);
+
+        List<EntityModel<ConsultaResponseDTO>> consultaResources = consultas.stream()
+                .map(consulta -> {
+                    ConsultaResponseDTO consultaResponse = consultaMapper.consultaToResponse(consulta);
+                    EntityModel<ConsultaResponseDTO> resource = EntityModel.of(consultaResponse);
+                    resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).getConsultasPorDentista(id)).withSelfRel());
+                    return resource;
+                }).toList();
+
+        return ResponseEntity.ok(consultaResources);
     }
 
     // Método original para atualizar um dentista
@@ -133,6 +152,7 @@ public class DentistaController {
             dentista.setNomeDentista(dentistaRequestDTO.nomeDentista());
             dentista.setCro(dentistaRequestDTO.cro());
             dentista.setEspecialidade(dentistaRequestDTO.especialidade());
+            dentista.setEmail(dentistaRequestDTO.email());
             Dentista dentistaAtualizado = dentistaRepository.save(dentista);
             return ResponseEntity.ok(dentistaMapper.dentistaToResponse(dentistaAtualizado));
         }).orElse(ResponseEntity.notFound().build());
