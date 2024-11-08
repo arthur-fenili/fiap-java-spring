@@ -16,7 +16,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,11 +90,32 @@ public class DentistaController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping
-    public ResponseEntity<List<DentistaResponseDTO>> readDentistas() {
+    public ResponseEntity<CollectionModel<EntityModel<DentistaResponseDTO>>> readDentistas() {
         Iterable<Dentista> dentistas = dentistaRepository.findAll();
-        List<DentistaResponseDTO> dentistasResponse = new ArrayList<>();
-        dentistas.forEach(dentista -> dentistasResponse.add(dentistaMapper.dentistaToResponse(dentista)));
-        return new ResponseEntity<>(dentistasResponse, HttpStatus.OK);
+
+        List<EntityModel<DentistaResponseDTO>> dentistasResources = new ArrayList<>();
+
+        dentistas.forEach(dentista -> {
+            DentistaResponseDTO dentistaResponse = dentistaMapper.dentistaToResponse(dentista);
+
+            // Cria um EntityModel para cada dentista e adiciona links
+            EntityModel<DentistaResponseDTO> dentistaResource = EntityModel.of(dentistaResponse);
+            dentistaResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).getDentistaById(dentista.getIdDentista())).withSelfRel());
+            dentistaResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).updateDentista(dentista.getIdDentista(), null)).withRel("editar"));
+            dentistaResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).deleteDentista(dentista.getIdDentista())).withRel("deletar"));
+            dentistaResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).getConsultasPorDentista(dentista.getIdDentista())).withRel("consultas"));
+
+            dentistasResources.add(dentistaResource);
+        });
+
+        // Cria um link global para adicionar um novo dentista
+        Link linkToCreateDentista = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DentistaController.class).createDentista(null)).withRel("criarDentista");
+
+        // Retorna o CollectionModel com os links
+        CollectionModel<EntityModel<DentistaResponseDTO>> collectionModel = CollectionModel.of(dentistasResources);
+        collectionModel.add(linkToCreateDentista);
+
+        return ResponseEntity.ok(collectionModel);
     }
 
     // Método original para buscar um dentista específico por ID

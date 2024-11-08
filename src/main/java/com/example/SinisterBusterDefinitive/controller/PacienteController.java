@@ -17,7 +17,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,11 +88,28 @@ public class PacienteController {
                     content = @Content(schema = @Schema()))
     })
     @GetMapping
-    public ResponseEntity<List<PacienteResponseDTO>> getAllPacientes() {
+    public ResponseEntity<CollectionModel<EntityModel<PacienteResponseDTO>>> getAllPacientes() {
         Iterable<Paciente> pacientes = pacienteRepository.findAll();
-        List<PacienteResponseDTO> pacientesResponse = new ArrayList<>();
-        pacientes.forEach(paciente -> pacientesResponse.add(pacienteMapper.pacienteToResponse(paciente)));
-        return new ResponseEntity<>(pacientesResponse, HttpStatus.OK);
+
+        List<EntityModel<PacienteResponseDTO>> pacientesResources = new ArrayList<>();
+
+        pacientes.forEach(paciente -> {
+            PacienteResponseDTO pacienteResponse = pacienteMapper.pacienteToResponse(paciente);
+
+            EntityModel<PacienteResponseDTO> pacienteResource = EntityModel.of(pacienteResponse);
+            pacienteResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).getPacienteById(paciente.getIdPaciente())).withSelfRel());
+            pacienteResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).updatePaciente(paciente.getIdPaciente(), null)).withRel("editar"));
+            pacienteResource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).deletePaciente(paciente.getIdPaciente())).withRel("deletar"));
+
+            pacientesResources.add(pacienteResource);
+        });
+
+        Link linkToCreatePaciente = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(PacienteController.class).createPaciente(null)).withRel("criarPaciente");
+
+        CollectionModel<EntityModel<PacienteResponseDTO>> collectionModel = CollectionModel.of(pacientesResources);
+        collectionModel.add(linkToCreatePaciente);
+
+        return ResponseEntity.ok(collectionModel);
     }
 
     // Método original para buscar um paciente específico por ID
