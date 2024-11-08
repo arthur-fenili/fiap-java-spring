@@ -29,4 +29,10 @@ public class Paciente {
     @Column(name = "plano_saude")
     private Plano planoSaude;
 
+    @Column(name = "telefone")
+    private String telefone;
+
+    @Column(name = "email")
+    private String email;
+
 }

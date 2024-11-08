@@ -4,7 +4,8 @@ package com.example.SinisterBusterDefinitive.dto;
 public record DentistaRequestDTO(
         String nomeDentista,
         String cro,
-        String especialidade
+        String especialidade,
+        String email
 ) {
     @Override
     public String nomeDentista() {
@@ -19,5 +20,10 @@ public record DentistaRequestDTO(
     @Override
     public String especialidade() {
         return especialidade;
+    }
+
+    @Override
+    public String email() {
+        return email;
     }
 }

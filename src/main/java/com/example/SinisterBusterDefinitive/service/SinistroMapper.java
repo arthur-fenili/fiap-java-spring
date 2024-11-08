@@ -34,14 +34,17 @@ public class SinistroMapper {
                         sinistro.getDentista().getIdDentista(),
                         sinistro.getDentista().getNomeDentista(),
                         sinistro.getDentista().getCro(),
-                        sinistro.getDentista().getEspecialidade()
+                        sinistro.getDentista().getEspecialidade(),
+                        sinistro.getDentista().getEmail()
                 ),
                 new PacienteResponseDTO(
                         sinistro.getPaciente().getIdPaciente(),
                         sinistro.getPaciente().getNome(),
                         sinistro.getPaciente().getCpf(),
                         sinistro.getPaciente().getDataNascimento(),
-                        sinistro.getPaciente().getPlanoSaude()
+                        sinistro.getPaciente().getPlanoSaude(),
+                        sinistro.getPaciente().getTelefone(),
+                        sinistro.getPaciente().getEmail()
                 )
         );
     }

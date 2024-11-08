@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-// localhost:8080/dentistas
 @RequestMapping(value = "/dentistas", produces = "application/json")
 public class DentistaController {
     @Autowired
@@ -39,12 +38,34 @@ public class DentistaController {
     @Autowired
     private ConsultaMapper consultaMapper;
 
+    // Método para inserir dentista via Procedure
+    @PostMapping("/procedure")
+    public ResponseEntity<String> inserirDentistaProcedure(@RequestBody Dentista dentista) {
+        dentistaMapper.inserirDentista(dentista);
+        return ResponseEntity.ok("Dentista inserido via procedure com sucesso.");
+    }
 
+    // Método para atualizar dentista via Procedure
+    @PutMapping("/procedure/{id}")
+    public ResponseEntity<String> atualizarDentistaProcedure(@PathVariable Long id, @RequestBody Dentista dentista) {
+        dentista.setIdDentista(id);
+        dentistaMapper.atualizarDentista(dentista);
+        return ResponseEntity.ok("Dentista atualizado via procedure com sucesso.");
+    }
+
+    // Método para deletar dentista via Procedure
+    @DeleteMapping("/procedure/{id}")
+    public ResponseEntity<String> deletarDentistaProcedure(@PathVariable Long id) {
+        dentistaMapper.deletarDentista(id);
+        return ResponseEntity.ok("Dentista deletado via procedure com sucesso.");
+    }
+
+    // Método original para criar dentista
     @Operation(summary = "Cria um dentista e grava no banco.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Dentista cadastrado com sucesso."),
             @ApiResponse(responseCode = "400", description = "Atributos informados são inválidos.",
-            content = @Content(schema = @Schema()))
+                    content = @Content(schema = @Schema()))
     })
     @PostMapping
     public ResponseEntity<DentistaResponseDTO> createDentista(@Valid @RequestBody DentistaRequestDTO dentistaRequestDTO) {
@@ -54,43 +75,41 @@ public class DentistaController {
         return new ResponseEntity<>(dentistaResponseDTO, HttpStatus.CREATED);
     }
 
-
-    // GET (todos os dentistas)
+    // Método original para listar todos os dentistas
     @Operation(summary = "Lista todos os dentistas do banco de dados.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Dentistas encontrados com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Nenhum dentista encontrado.",
-            content = @Content(schema = @Schema()))
+            @ApiResponse(responseCode = "200", description = "Dentistas encontrados com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Nenhum dentista encontrado.",
+                    content = @Content(schema = @Schema()))
     })
     @GetMapping
-    public ResponseEntity<DentistaResponseDTO> readDentistas(){
+    public ResponseEntity<List<DentistaResponseDTO>> readDentistas() {
         Iterable<Dentista> dentistas = dentistaRepository.findAll();
         List<DentistaResponseDTO> dentistasResponse = new ArrayList<>();
         dentistas.forEach(dentista -> dentistasResponse.add(dentistaMapper.dentistaToResponse(dentista)));
-        return new ResponseEntity(dentistasResponse, HttpStatus.OK);
+        return new ResponseEntity<>(dentistasResponse, HttpStatus.OK);
     }
 
-
-    // GET (por id, dentista específico)
+    // Método original para buscar um dentista específico por ID
     @Operation(summary = "Busca um dentista pelo ID.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Dentista encontrado com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Nenhum dentista encontrado com esse ID.",
-            content = @Content(schema = @Schema()))
+            @ApiResponse(responseCode = "200", description = "Dentista encontrado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Nenhum dentista encontrado com esse ID.",
+                    content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}")
-    public ResponseEntity<DentistaResponseDTO> getDentistaById(@PathVariable Long id){
-        return dentistaRepository.findById(id).map(dentista -> ResponseEntity.ok(dentistaMapper.dentistaToResponse(dentista)))
+    public ResponseEntity<DentistaResponseDTO> getDentistaById(@PathVariable Long id) {
+        return dentistaRepository.findById(id)
+                .map(dentista -> ResponseEntity.ok(dentistaMapper.dentistaToResponse(dentista)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
-    // GET (consultas de um dentista específico)
+    // Método original para buscar todas as consultas de um dentista específico
     @Operation(summary = "Busca todas as consultas associadas a um dentista específico.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Consultas encontradas com sucesso."),
-            @ApiResponse(responseCode = "400", description = "Nenhuma consulta encontrada para esse dentista.",
-            content = @Content(schema = @Schema()))
+            @ApiResponse(responseCode = "200", description = "Consultas encontradas com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Nenhuma consulta encontrada para esse dentista.",
+                    content = @Content(schema = @Schema()))
     })
     @GetMapping("/{id}/consultas")
     public ResponseEntity<List<ConsultaResponseDTO>> getConsultasPorDentista(@PathVariable Long id) {
@@ -101,16 +120,15 @@ public class DentistaController {
         return ResponseEntity.ok(consultasResponse);
     }
 
-
-    //PUT (atualizar informações de um dentista cadastrado)
+    // Método original para atualizar um dentista
     @Operation(summary = "Atualiza informações de um dentista.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Dentista atualizado com sucesso."),
+            @ApiResponse(responseCode = "200", description = "Dentista atualizado com sucesso."),
             @ApiResponse(responseCode = "404", description = "Dentista não encontrado.",
-            content = @Content(schema = @Schema()))
+                    content = @Content(schema = @Schema()))
     })
     @PutMapping("/{id}")
-    public ResponseEntity<DentistaResponseDTO> updateDentista(@PathVariable Long id, @Valid @RequestBody DentistaRequestDTO dentistaRequestDTO){
+    public ResponseEntity<DentistaResponseDTO> updateDentista(@PathVariable Long id, @Valid @RequestBody DentistaRequestDTO dentistaRequestDTO) {
         return dentistaRepository.findById(id).map(dentista -> {
             dentista.setNomeDentista(dentistaRequestDTO.nomeDentista());
             dentista.setCro(dentistaRequestDTO.cro());
@@ -120,8 +138,7 @@ public class DentistaController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
-
-    // DELETE (deletar dentista por id)
+    // Método original para deletar um dentista
     @Operation(summary = "Deleta um dentista pelo ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dentista deletado com sucesso."),

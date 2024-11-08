@@ -26,6 +26,9 @@ public class Dentista {
     @Column(name = "especialidade")
     private String especialidade;
 
+    @Column(name = "email")
+    private String email;
+
 
 }
 

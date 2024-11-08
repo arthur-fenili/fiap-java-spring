@@ -7,5 +7,7 @@ public record PacienteResponseDTO(
         String nome,
         String cpf,
         String dataNascimento,
-        Plano planoSaude
+        Plano planoSaude,
+        String telefone,
+        String email
 ) {}

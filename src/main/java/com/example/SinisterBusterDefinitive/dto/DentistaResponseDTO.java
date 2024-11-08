@@ -4,5 +4,6 @@ public record DentistaResponseDTO(
         Long idDentista,
         String nomeDentista,
         String cro,
-        String especialidade
+        String especialidade,
+        String email
 ) {}

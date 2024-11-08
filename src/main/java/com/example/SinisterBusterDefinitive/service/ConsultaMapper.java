@@ -29,14 +29,17 @@ public class ConsultaMapper {
                 consulta.getPaciente().getNome(),
                 consulta.getPaciente().getCpf(),
                 consulta.getPaciente().getDataNascimento(),
-                consulta.getPaciente().getPlanoSaude()
+                consulta.getPaciente().getPlanoSaude(),
+                consulta.getPaciente().getTelefone(),
+                consulta.getPaciente().getEmail()
         );
 
         DentistaResponseDTO dentistaDTO = new DentistaResponseDTO(
                 consulta.getDentista().getIdDentista(),
                 consulta.getDentista().getNomeDentista(),
                 consulta.getDentista().getCro(),
-                consulta.getDentista().getEspecialidade()
+                consulta.getDentista().getEspecialidade(),
+                consulta.getDentista().getEmail()
         );
 
         return new ConsultaResponseDTO(

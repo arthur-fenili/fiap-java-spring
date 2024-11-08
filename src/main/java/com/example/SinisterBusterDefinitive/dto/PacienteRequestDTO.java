@@ -7,7 +7,9 @@ public record PacienteRequestDTO(
         String nome,
         String cpf,
         String dataNascimento,
-        Plano planoSaude
+        Plano planoSaude,
+        String telefone,
+        String email
 
 ) {
     @Override
@@ -30,4 +32,13 @@ public record PacienteRequestDTO(
         return planoSaude;
     }
 
+    @Override
+    public String telefone() {
+        return telefone;
+    }
+
+    @Override
+    public String email() {
+        return email;
+    }
 }
